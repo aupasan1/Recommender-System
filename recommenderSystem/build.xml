@@ -1,0 +1,70 @@
+<project name="recommenderSystem" default="compile_all" basedir=".">
+
+  <property name="BUILD.compiler"       value="modern"/>
+  <property name="src"                  value="src"/>
+  <property name="BUILD"                value="BUILD"/>
+  <property name="classes"              value="${BUILD}/classes"/>
+  <property name="doc"					value="doc"/>
+
+  <target name="all" depends="compile_all"/>
+
+  <target name="compile_all"
+          depends="recommenderSystem"/>
+
+  <target name="clean">
+       <delete dir="${BUILD}"/>
+       <delete dir="${doc}"/>
+  </target>
+
+  <!-- Prepare target directories -->
+  <target name="prepare">
+        <mkdir dir="${BUILD}"/>
+        <mkdir dir="${classes}"/>
+  </target>
+
+ <target name="jar">
+        <mkdir dir="${BUILD}/jar"/>
+        <jar destfile="${BUILD}/jar/recommenderSystem.jar" basedir="${BUILD}/classes">
+            <manifest>
+                <attribute name="Main-Class" value="recommenderSystem.driver.Driver"/>
+            </manifest>
+        </jar>
+    </target>
+
+  <!-- ** means all subdirectories as well -->
+  <!-- * means all files in the current directory -->
+  <!-- for just java files use *.java -->
+
+  <target name="recommenderSystem" depends="prepare">
+    <javac srcdir="${src}"
+           includes="recommenderSystem/**"
+           excludes="**/package.html"
+           destdir="${classes}"
+           classpath="${classes}"
+           debug="on"
+           optimize="on"
+           deprecation="off"/>
+  </target>
+
+<target name="run" depends="jar">
+        <java jar="${BUILD}/jar/recommenderSystem.jar"  fork="true">
+        <arg value="${arg0}"/>
+        <arg value="${arg1}"/>
+        <arg value="${arg2}"/>
+        <arg value="${arg3}"/>
+        <arg value="${arg4}"/>
+        </java>
+	
+    </target>
+
+<target name="zip" > 
+	    <delete file="./upasani_abhishek.zip" quiet="true" /> 
+	    <zip destfile="${BUILD}/dist/upasani_abhishek.zip" basedir="../../"/>
+</target>
+	
+<target name="docs" description="Generate JavaDoc">
+		<mkdir dir="${doc}"/>
+		<javadoc sourcepath="${src}" destdir="${doc}"/>
+</target>
+
+</project>
